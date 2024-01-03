@@ -3,8 +3,9 @@ import {useParams} from "react-router";
 import NotFound from "./NotFound";
 import Loading from "./Loading";
 import '../styles/ProductPage.css'
+import AddComment from "./AddComment";
 
-const ProductPage = () => {
+const ProductPage = ({ isAuthed }) => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [comments, setComments] = useState([]);
@@ -40,6 +41,10 @@ const ProductPage = () => {
         fetchData().then().catch(error => console.error("Fetch error", error));
     }, [id]);
 
+    const addComment = (newComment) => {
+        setComments(prevComments => [...prevComments, newComment]);
+    }
+
     if (notFound) {
         return <NotFound />
     }
@@ -60,7 +65,7 @@ const ProductPage = () => {
                     <p className="lead">{product.description}</p>
                     <p><strong>Price: </strong> {Math.round(product.price * 100) / 100} CZK</p>
                     <p><strong>Category: </strong> {product.category}</p>
-                    <button className="btn btn-primary">Add to cart</button>
+                    <button className="btn btn-primary" >Add to cart</button>
 
                     <div className="comments-section mt-5">
                         <h3>Comments</h3>
@@ -70,6 +75,17 @@ const ProductPage = () => {
                                 <p>{comment.text}</p>
                             </div>
                         ))}
+
+                        {isAuthed ? <AddComment productId={product.id} onAddComment={addComment}/> : (
+                            <div className="alert alert-warning" role="alert">
+                                <span className="me-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                                        <path d="M8.982 1.318a.5.5 0 00-.964 0L1 13h14L8.982 1.318zM8 5a.5.5 0 011 0v3a.5.5 0 010 1H8V5zM8 12a.5.5 0 110-1 .5.5 0 010 1z"/>
+                                    </svg>
+                                </span>
+                                Only signed up users can leave comments.
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
