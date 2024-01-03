@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import Cookies from "js-cookie";
 
 
-const Header = ({isAuthed, onLogout}) => {
+const Header = ({isAuthed, onLogout, price}) => {
     return (
         <div className="container">
             <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
@@ -13,7 +13,7 @@ const Header = ({isAuthed, onLogout}) => {
                     </a>
                 </div>
 
-                <Menu />
+                <Menu price={price}/>
 
                 {isAuthed ? (
                     <div className="col-md-4 text-end">
