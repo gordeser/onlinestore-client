@@ -23,7 +23,7 @@ const ProductPage = ({ isAuthed, onChange }) => {
                     setNotFound(true);
                     return;
                 } else {
-                    throw new Error("Error fetching product");
+                    console.error("Error fetching product");
                 }
 
                 const commentsResponse = await fetch(`http://localhost:8080/api/products/${id}/comments`);
@@ -31,7 +31,7 @@ const ProductPage = ({ isAuthed, onChange }) => {
                     const commentsData = await commentsResponse.json();
                     setComments(commentsData);
                 } else {
-                    throw new Error("Error fetching comments");
+                    console.error("Error fetching comments");
                 }
 
             } catch (error) {
