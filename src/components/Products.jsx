@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Cookies from "js-cookie";
+import {Link} from "react-router-dom";
 
 
 const Products = ({ onChange }) => {
@@ -28,14 +29,16 @@ const Products = ({ onChange }) => {
     return (
         <div className="container">
             <h1 className="mb-3 text-center fw-normal">Products</h1>
-            <div className="row row-cols-2 row-cols-md-4 g-4">
+            <div className="row row-cols-2 row-cols-md-5 g-4">
                 {products.map(product => (
                     <div key={product.id} className="col">
                         <div className="card h-100 shadow" style={{width: '100%'}}>
                             <img src={product.image} className="card-img-top p-2" alt={product.name} />
                             <br />
                             <div className="card-body">
-                                <h5 className="card-title">{product.name}</h5>
+                                <Link to={`/products/${product.id}`}>
+                                    <h5 className="card-title mb-4">{product.name}</h5>
+                                </Link>
                                 <p className="card-text"><strong>Price: </strong>{product.price}</p>
                                 <button className="btn btn-primary" onClick={() => handleAdd(product.id, product.price)}>Add to cart</button>
                             </div>
