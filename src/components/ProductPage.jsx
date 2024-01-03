@@ -4,8 +4,9 @@ import NotFound from "./NotFound";
 import Loading from "./Loading";
 import '../styles/ProductPage.css'
 import AddComment from "./AddComment";
+import Cookies from "js-cookie";
 
-const ProductPage = ({ isAuthed }) => {
+const ProductPage = ({ isAuthed, onChange }) => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [comments, setComments] = useState([]);
@@ -41,8 +42,22 @@ const ProductPage = ({ isAuthed }) => {
         fetchData().then().catch(error => console.error("Fetch error", error));
     }, [id]);
 
+
     const addComment = (newComment) => {
         setComments(prevComments => [...prevComments, newComment]);
+    }
+
+    const addToCart = (productId) => {
+        let cart = Cookies.get('cart');
+        let cartArray = cart ? cart.split(':') : [];
+
+        cartArray.push(productId.toString());
+        Cookies.set('cart', cartArray.join(':'), {expires: 7});
+    }
+
+    const handleAdd = (productId, productPrice) => {
+        addToCart(productId);
+        onChange(productPrice);
     }
 
     if (notFound) {
@@ -65,7 +80,7 @@ const ProductPage = ({ isAuthed }) => {
                     <p className="lead">{product.description}</p>
                     <p><strong>Price: </strong> {Math.round(product.price * 100) / 100} CZK</p>
                     <p><strong>Category: </strong> {product.category}</p>
-                    <button className="btn btn-primary" >Add to cart</button>
+                    <button className="btn btn-primary" onClick={() => handleAdd(id, product.price)}>Add to cart</button>
 
                     <div className="comments-section mt-5">
                         <h3>Comments</h3>

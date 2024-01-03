@@ -57,7 +57,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<MainLayout isAuthed={isAuthed} onLogout={handleLogOut} price={price}/>}>
                     <Route path="products" element={<Products onChange={(toAdd) => handleAddPrice(toAdd)}/>} />
-                    <Route path="/products/:id" element={<ProductPage isAuthed={isAuthed}/>} />
+                    <Route path="/products/:id" element={<ProductPage isAuthed={isAuthed} onChange={(toAdd) => handleAddPrice(toAdd)}/>} />
                     <Route path="cart" element={<Cart />} />
                     <Route path="login" element={<Login onLogin={handleLogin} />} />
                     <Route path="signup" element={<Signup onSignup={handleSignup}/>} />
