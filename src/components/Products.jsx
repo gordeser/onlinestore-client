@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
+import Cookies from "js-cookie";
 
-const Products = () => {
+
+const Products = ({ onChange }) => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -9,6 +11,19 @@ const Products = () => {
             .then(data => setProducts(data))
             .catch(error => console.error('Error fetching products', error))
     }, []);
+
+    const addToCart = (productId) => {
+        let cart = Cookies.get('cart');
+        let cartArray = cart ? cart.split(':') : [];
+
+        cartArray.push(productId.toString());
+        Cookies.set('cart', cartArray.join(':'), {expires: 7});
+    }
+
+    const handleAdd = (productId, productPrice) => {
+        addToCart(productId);
+        onChange(productPrice);
+    }
 
     return (
         <div className="container">
@@ -22,7 +37,7 @@ const Products = () => {
                             <div className="card-body">
                                 <h5 className="card-title">{product.name}</h5>
                                 <p className="card-text"><strong>Price: </strong>{product.price}</p>
-                                <button className="btn btn-primary">Add to cart</button>
+                                <button className="btn btn-primary" onClick={() => handleAdd(product.id, product.price)}>Add to cart</button>
                             </div>
                         </div>
                     </div>
