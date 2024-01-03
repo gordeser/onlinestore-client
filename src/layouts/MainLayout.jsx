@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 
-const MainLayout = () => {
+const MainLayout = ({isAuthed, onLogout}) => {
     return (
         <>
-            <Header />
+            <Header isAuthed={isAuthed} onLogout={onLogout} />
             <Outlet />
         </>
     )
