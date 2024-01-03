@@ -11,6 +11,27 @@ import Cookies from "js-cookie";
 import ProductPage from "./components/ProductPage";
 
 function App() {
+    useEffect(() => {
+        let cart = Cookies.get('cart');
+        let cartArray = cart ? cart.split(':') : [];
+
+        const fetchPromises = cartArray.map(
+            id => fetch(`http://localhost:8080/api/products/${id}`).then(res => res.json())
+        )
+
+        Promise.all(fetchPromises).then(products => {
+            const sum = products.reduce(
+                (acc, product) => acc + product.price, 0);
+
+            setPrice(Math.round(sum*100)/100);
+        }).catch(error => {
+            console.error("Failed fetching products: ", error);
+        })
+    }, []);
+
+
+    const [price, setPrice] = useState(0);
+
     const [isAuthed, setIsAuthed] = useState(!!Cookies.get("email"));
 
     const handleLogin = () => {
@@ -27,11 +48,15 @@ function App() {
         setIsAuthed(true);
     }
 
+    const handleAddPrice = (toAdd) => {
+        setPrice(Math.round((price + toAdd)*100)/100);
+    }
+
     return <BrowserRouter>
         <div>
             <Routes>
-                    <Route path="products" element={<Products />} />
-                <Route path="/" element={<MainLayout isAuthed={isAuthed} onLogout={handleLogOut} />}>
+                <Route path="/" element={<MainLayout isAuthed={isAuthed} onLogout={handleLogOut} price={price}/>}>
+                    <Route path="products" element={<Products onChange={(toAdd) => handleAddPrice(toAdd)}/>} />
                     <Route path="/products/:id" element={<ProductPage />} />
                     <Route path="cart" element={<Cart />} />
                     <Route path="login" element={<Login onLogin={handleLogin} />} />
