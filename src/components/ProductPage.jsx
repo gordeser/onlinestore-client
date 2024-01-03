@@ -65,7 +65,7 @@ const ProductPage = () => {
                     <div className="comments-section mt-5">
                         <h3>Comments</h3>
                         {comments.map(comment => (
-                            <div className="comment mb-3">
+                            <div key={comment.id} className="comment mb-3">
                                 <p><strong>{comment.user.name} {comment.user.surname}</strong> ({comment.user.email}) - <small>{new Date(comment.date).toLocaleString()}</small></p>
                                 <p>{comment.text}</p>
                             </div>
