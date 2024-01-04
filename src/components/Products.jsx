@@ -6,13 +6,23 @@ import Loading from "./Loading";
 
 const Products = ({ onChange }) => {
     const [products, setProducts] = useState([]);
+    const [category, setCategory] = useState('all');
+
+    const handleCategoryChange = (e) => {
+        setCategory(e.target.value);
+    }
+
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/products')
+        const url = category === 'all'
+            ? 'http://localhost:8080/api/products'
+            : `http://localhost:8080/api/products?category=${category}`
+
+        fetch(url)
             .then(response => response.json())
             .then(data => setProducts(data))
             .catch(error => console.error('Error fetching products', error))
-    }, []);
+    }, [category]);
 
     const addToCart = (productId) => {
         let cart = Cookies.get('cart');
@@ -39,6 +49,18 @@ const Products = ({ onChange }) => {
     return (
         <div className="container">
             <h1 className="mb-3 text-center fw-normal">Products</h1>
+            <div className="row">
+                <div className="col-3">
+                    <h2 className="fw-normal">Category</h2>
+                    <select className="form-select mb-5" value={category} onChange={handleCategoryChange}>
+                        <option value="all">All categories</option>
+                        <option value="category1">Category 1</option>
+                        <option value="category2">Category 2</option>
+                        <option value="category3">Category 3</option>
+                    </select>
+                </div>
+            </div>
+
             <div className="row row-cols-2 row-cols-md-5 g-4">
                 {products.map(product => (
                     <div key={product.id} className="col">
