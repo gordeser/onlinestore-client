@@ -53,13 +53,18 @@ function App() {
         setPrice(Math.round((price + toAdd)*100)/100);
     }
 
+    const handleClearCart = () => {
+        setPrice(0);
+        Cookies.set('cart', '', {expires: 7});
+    }
+
     return <BrowserRouter>
         <div>
             <Routes>
                 <Route path="/" element={<MainLayout isAuthed={isAuthed} onLogout={handleLogOut} price={price}/>}>
                     <Route path="products" element={<Products onChange={(toAdd) => handleAddPrice(toAdd)}/>} />
                     <Route path="products/:id" element={<ProductPage isAuthed={isAuthed} onChange={(toAdd) => handleAddPrice(toAdd)}/>} />
-                    <Route path="cart" element={<Cart isAuthed={isAuthed} price={price}/>} />
+                    <Route path="cart" element={<Cart onCreate={handleClearCart} isAuthed={isAuthed} price={price}/>} />
                     <Route path="login" element={<Login onLogin={handleLogin} />} />
                     <Route path="signup" element={<Signup onSignup={handleSignup}/>} />
                     <Route path="orders" element={<Orders />} />
