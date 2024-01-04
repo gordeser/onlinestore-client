@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Cookies from "js-cookie";
 import {Link} from "react-router-dom";
+import Loading from "./Loading";
 
 
 const Products = ({ onChange }) => {
@@ -24,6 +25,15 @@ const Products = ({ onChange }) => {
     const handleAdd = (productId, productPrice) => {
         addToCart(productId);
         onChange(productPrice);
+    }
+
+    if (products.length === 0) {
+        return (
+            <div className="container">
+                <h1 className="mb-3 text-center fw-normal">Products</h1>
+                <Loading />
+            </div>
+        )
     }
 
     return (
