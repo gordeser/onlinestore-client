@@ -16,9 +16,12 @@ const Header = ({isAuthed, onLogout, price}) => {
                 <Menu price={price}/>
 
                 {isAuthed ? (
-                    <div className="col-md-4 text-end">
+                    <div className="col-md-5 text-end">
                         <span>{'Logged in as ' + Cookies.get("email")}</span>
-                        <button type="button" className="btn btn-primary ms-4" onClick={onLogout}>Log out</button>
+                        <Link to="/orders">
+                            <button type="button" className="btn btn-primary ms-4">Orders</button>
+                        </Link>
+                        <button type="button" className="btn btn-primary ms-3" onClick={onLogout}>Log out</button>
                     </div>
                 ) : (
                     <div className="col-md-3 text-end">
