@@ -33,8 +33,7 @@ const Cart = ({ onCreate, isAuthed, price }) => {
         });
 
     }, [productsCount]);
-
-    // todo
+    
     const handleOrder = async () => {
 
         const orderProducts = Object.entries(productsCount).map(([id, quantity]) => ({
@@ -62,6 +61,8 @@ const Cart = ({ onCreate, isAuthed, price }) => {
                 navigate("/");
             } else if (response.status === 400) {
                 alert("Order amount should be in the range of 300 to 100,000 CZK")
+            } else if (response.status === 404) {
+                alert("User does not exist");
             } else {
                 alert("Error creating an order");
             }
