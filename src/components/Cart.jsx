@@ -1,8 +1,10 @@
 import {useEffect, useState} from "react";
 import Cookies from "js-cookie";
+import {useNavigate} from "react-router-dom";
 
-const Cart = ({ isAuthed, price }) => {
+const Cart = ({ onCreate, isAuthed, price }) => {
     const [productsCount, setProductsCount] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         const cartCookie = Cookies.get('cart');
@@ -33,8 +35,39 @@ const Cart = ({ isAuthed, price }) => {
     }, [productsCount]);
 
     // todo
-    const handleOrder = () => {
+    const handleOrder = async () => {
 
+        const orderProducts = Object.entries(productsCount).map(([id, quantity]) => ({
+            id: parseInt(id),
+            quantity: parseInt(quantity)
+        }))
+
+        const order = {
+            userEmail: Cookies.get('email'),
+            orderProducts
+        }
+
+        try {
+            const response = await fetch("http://localhost:8080/api/orders", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(order)
+            });
+
+            if (response.ok) {
+                alert("Order is successfully created");
+                onCreate();
+                navigate("/");
+            } else if (response.status === 400) {
+                alert("Order amount should be in the range of 300 to 100,000 CZK")
+            } else {
+                alert("Error creating an order");
+            }
+        } catch (error) {
+            console.error("Error creating an order: ", error);
+        }
     }
 
     return (
