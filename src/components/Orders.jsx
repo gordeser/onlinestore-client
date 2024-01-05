@@ -40,16 +40,23 @@ const Orders = ({isAuthed}) => {
     return (
         <div className="container">
             <h1 className="mb-5 text-center fw-normal">Your orders</h1>
-            <div className="row row-cols-md-4 g-4">
-            {orders.map(order => (
-                <div key={order.id} className="col card me-4" style={{width: "15rem"}}>
-                    <div className="card-body">
-                        <Link to={`/orders/${order.id}`}>
-                            <h5 className="card-title text-center">Order #{order.id}</h5>
-                        </Link>
-                    </div>
+
+            {orders.length === 0 &&
+                <div>
+                    <h3 className="mb-5 text-center fw-normal">You do not have any orders</h3>
                 </div>
-            ))}
+            }
+
+            <div className="row row-cols-md-4 g-4">
+                {orders.map(order => (
+                    <div key={order.id} className="col card me-4" style={{width: "15rem"}}>
+                        <div className="card-body">
+                            <Link to={`/orders/${order.id}`}>
+                                <h5 className="card-title text-center">Order #{order.id}</h5>
+                            </Link>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     )
