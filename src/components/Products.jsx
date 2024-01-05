@@ -62,7 +62,7 @@ const Products = ({ onChange }) => {
                                     <Link to={`/product/${product.id}`}>
                                         <h5 className="card-title mb-4">{product.name}</h5>
                                     </Link>
-                                    <p className="card-text"><strong>Price: </strong>{product.price}</p>
+                                    <p className="card-text"><strong>Price: </strong>{Math.round(product.price * 100) / 100}</p>
                                     <button className="btn btn-primary" onClick={() => handleAdd(product.id, product.price)}>Add to cart</button>
                                 </div>
                             </div>
