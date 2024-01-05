@@ -1,9 +1,17 @@
 import Menu from "./Menu";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 
 
 const Header = ({isAuthed, onLogout, price}) => {
+
+    const navigate = useNavigate();
+
+    const handleLogOut = () => {
+        onLogout();
+        navigate('/');
+    }
+
     return (
         <div className="container">
             <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
@@ -21,7 +29,7 @@ const Header = ({isAuthed, onLogout, price}) => {
                         <Link to="/orders">
                             <button type="button" className="btn btn-primary ms-4">Orders</button>
                         </Link>
-                        <button type="button" className="btn btn-primary ms-3" onClick={onLogout}>Log out</button>
+                        <button type="button" className="btn btn-primary ms-3" onClick={handleLogOut}>Log out</button>
                     </div>
                 ) : (
                     <div className="col-md-3 text-end">
