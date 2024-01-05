@@ -29,7 +29,7 @@ const Signup = ({ onSignup }) => {
 
         if (isEmailValid && isPasswordValid) {
             try {
-                const response = await fetch("http://localhost:8080/api/signup", {
+                const response = await fetch("http://localhost:8080/api/users/signup", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
