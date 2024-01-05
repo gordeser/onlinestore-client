@@ -13,12 +13,13 @@ import Orders from "./components/Orders";
 import OrderPage from "./components/OrderPage";
 
 function App() {
+
     useEffect(() => {
         let cart = Cookies.get('cart');
         let cartArray = cart ? cart.split(':') : [];
 
         const fetchPromises = cartArray.map(
-            id => fetch(`http://localhost:8080/api/products/${id}`).then(res => res.json())
+            id => fetch(`http://localhost:8080/api/product/${id}`).then(res => res.json())
         )
 
         Promise.all(fetchPromises).then(products => {
@@ -31,9 +32,7 @@ function App() {
         })
     }, []);
 
-
     const [price, setPrice] = useState(0);
-
     const [isAuthed, setIsAuthed] = useState(!!Cookies.get("email"));
 
     const handleLogin = () => {
@@ -63,8 +62,8 @@ function App() {
         <div>
             <Routes>
                 <Route path="/" element={<MainLayout isAuthed={isAuthed} onLogout={handleLogOut} price={price}/>}>
-                    <Route path="products" element={<Products onChange={(toAdd) => handleAddPrice(toAdd)}/>} />
-                    <Route path="products/:id" element={<ProductPage isAuthed={isAuthed} onChange={(toAdd) => handleAddPrice(toAdd)}/>} />
+                    <Route path="product" element={<Products onChange={(toAdd) => handleAddPrice(toAdd)}/>} />
+                    <Route path="product/:id" element={<ProductPage isAuthed={isAuthed} onChange={(toAdd) => handleAddPrice(toAdd)}/>} />
                     <Route path="cart" element={<Cart onCreate={handleClearCart} isAuthed={isAuthed} price={price}/>} />
                     <Route path="login" element={<Login onLogin={handleLogin} />} />
                     <Route path="signup" element={<Signup onSignup={handleSignup}/>} />
