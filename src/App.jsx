@@ -10,6 +10,7 @@ import {useEffect, useState} from "react";
 import Cookies from "js-cookie";
 import ProductPage from "./components/ProductPage";
 import Orders from "./components/Orders";
+import OrderPage from "./components/OrderPage";
 
 function App() {
     useEffect(() => {
@@ -68,6 +69,7 @@ function App() {
                     <Route path="login" element={<Login onLogin={handleLogin} />} />
                     <Route path="signup" element={<Signup onSignup={handleSignup}/>} />
                     <Route path="orders" element={<Orders />} />
+                    <Route path="orders/:id" element={<OrderPage isAuthed={isAuthed} />} />
 
                     <Route path="*" element={<NotFound />} />
                 </Route>
