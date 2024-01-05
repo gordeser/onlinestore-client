@@ -15,7 +15,7 @@ const ProductPage = ({ isAuthed, onChange }) => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const productResponse = await fetch(`http://localhost:8080/api/products/${id}`);
+                const productResponse = await fetch(`http://localhost:8080/api/product/${id}`);
                 if (productResponse.ok) {
                     const productData = await productResponse.json();
                     setProduct(productData);
@@ -26,7 +26,7 @@ const ProductPage = ({ isAuthed, onChange }) => {
                     console.error("Error fetching product");
                 }
 
-                const commentsResponse = await fetch(`http://localhost:8080/api/products/${id}/comments`);
+                const commentsResponse = await fetch(`http://localhost:8080/api/product/${id}/comment`);
                 if (commentsResponse.ok) {
                     const commentsData = await commentsResponse.json();
                     setComments(commentsData);
@@ -39,7 +39,7 @@ const ProductPage = ({ isAuthed, onChange }) => {
             }
         }
 
-        fetchData().then().catch(error => console.error("Fetch error", error));
+        fetchData().then();
     }, [id]);
 
 
