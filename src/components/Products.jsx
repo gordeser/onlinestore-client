@@ -15,8 +15,8 @@ const Products = ({ onChange }) => {
 
     useEffect(() => {
         const url = category === 'all'
-            ? 'http://localhost:8080/api/products'
-            : `http://localhost:8080/api/products?category=${category}`
+            ? 'http://localhost:8080/api/product'
+            : `http://localhost:8080/api/product?category=${category}`
 
         fetch(url)
             .then(response => response.json())
@@ -59,7 +59,7 @@ const Products = ({ onChange }) => {
                                 <img src={product.image} className="card-img-top p-2" alt={product.name} />
                                 <br />
                                 <div className="card-body">
-                                    <Link to={`/products/${product.id}`}>
+                                    <Link to={`/product/${product.id}`}>
                                         <h5 className="card-title mb-4">{product.name}</h5>
                                     </Link>
                                     <p className="card-text"><strong>Price: </strong>{product.price}</p>
