@@ -15,11 +15,11 @@ const AddComment = ({ productId, onAddComment }) => {
 
         const commentData = {
             text: commentText,
-            email: userEmail
+            userEmail
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/products/${productId}/comments`, {
+            const response = await fetch(`http://localhost:8080/api/product/${productId}/comment`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
