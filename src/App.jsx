@@ -68,7 +68,7 @@ function App() {
                     <Route path="cart" element={<Cart onCreate={handleClearCart} isAuthed={isAuthed} price={price}/>} />
                     <Route path="login" element={<Login onLogin={handleLogin} />} />
                     <Route path="signup" element={<Signup onSignup={handleSignup}/>} />
-                    <Route path="orders" element={<Orders />} />
+                    <Route path="orders" element={<Orders isAuthed={isAuthed} />} />
                     <Route path="orders/:id" element={<OrderPage isAuthed={isAuthed} />} />
 
                     <Route path="*" element={<NotFound />} />
