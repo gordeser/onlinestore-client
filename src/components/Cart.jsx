@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import Cookies from "js-cookie";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Cart = ({ onCreate, isAuthed, price }) => {
     const [productsCount, setProductsCount] = useState({});
@@ -99,37 +99,17 @@ const Cart = ({ onCreate, isAuthed, price }) => {
     return (
         <div className="container py-4 align-content-center">
             <h1 className="mb-5 text-center fw-normal">Cart</h1>
-            {Object.keys(productsInfo).map(id =>
-                <div key={id} className="justify-content-center mb-5 row align-items-center my-3 p-2">
-                    <div className="col-1">
-                        <img src={productsInfo[id].image} className="img-fluid" alt={productsInfo[id].name} style={{maxWidth: "100px"}} />
-                    </div>
-                    <div className="ms-4 col-1"><strong>{productsInfo[id].name}</strong></div>
-
-                    <div className="ms-1 col-1">{productsCount[id]} items</div>
-                    <div className="col-1">*</div>
-                    <div className="col-1">{Math.round(productsInfo[id].price * 100) / 100} CZK</div>
-                    <div className="col-1">=</div>
-                    <div className="col-1"><strong>{Math.round(productsCount[id] * productsInfo[id].price * 100) / 100} CZK</strong></div>
-                </div>
-            )}
-
-            {Object.keys(productsInfo).length === 0 && (
-                <div>
-                    <h3 className="mb-5 text-center fw-normal">There are no items in your cart</h3>
-                </div>
-            )}
 
             {Object.keys(productsInfo).length !== 0 && (
                 <>
-                    <div className="d-flex justify-content-center">
-                        <h4>Total: {price} CZK</h4>
+                    <div className="d-flex">
+                        <h4 className="fw-normal">Total: {price} CZK</h4>
                     </div>
                     {isAuthed ? (
-                        <div className="d-flex justify-content-center">
+                        <div className="d-flex mb-3">
                             <button className="btn btn-primary" onClick={handleOrder}>Make an order</button>
                         </div>) : (
-                        <div className="d-flex justify-content-center alert alert-warning" style={{width: "30%", margin: "auto"}} role="alert">
+                        <div className="d-flex justify-content-center alert alert-warning" style={{width: "30%"}} role="alert">
                             <span className="me-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                                         <path d="M8.982 1.318a.5.5 0 00-.964 0L1 13h14L8.982 1.318zM8 5a.5.5 0 011 0v3a.5.5 0 010 1H8V5zM8 12a.5.5 0 110-1 .5.5 0 010 1z"/>
@@ -140,6 +120,32 @@ const Cart = ({ onCreate, isAuthed, price }) => {
                     )}
                 </>
             )}
+
+            <div className="row row-cols-2 row-cols-md-5 g-4">
+                {Object.keys(productsInfo).map(id => (
+                    <div key={id} className="col">
+                        <div className="card h-100 shadow" style={{width: '100%'}}>
+                            <img src={productsInfo[id].image} className="card-img-top p-2" alt={productsInfo[id].name} />
+                            <br />
+                            <div className="card-body">
+                                <Link to={`/product/${id}`}>
+                                    <h5 className="card-title mb-4">{productsInfo[id].name}</h5>
+                                </Link>
+                                <p className="card-text"><strong>Price: </strong>{productsInfo[id].price} CZK</p>
+                                <p className="card-text"><strong>Quantity: </strong>{productsCount[id]} pcs</p>
+                                <p className="card-text"><strong>Total price: </strong>{Math.round(productsCount[id] * productsInfo[id].price * 100) / 100} CZK</p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {Object.keys(productsInfo).length === 0 && (
+                <div>
+                    <h3 className="mb-5 text-center fw-normal">There are no items in your cart</h3>
+                </div>
+            )}
+
         </div>
     )
 }
