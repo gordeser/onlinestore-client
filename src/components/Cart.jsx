@@ -23,7 +23,7 @@ const Cart = ({ onCreate, isAuthed, price }) => {
 
     useEffect(() => {
         async function fetchProductInfo(id) {
-            const response = await fetch(`http://localhost:8080/api/products/${id}`);
+            const response = await fetch(`http://localhost:8080/api/product/${id}`);
             return await response.json();
         }
 
@@ -33,7 +33,24 @@ const Cart = ({ onCreate, isAuthed, price }) => {
         });
 
     }, [productsCount]);
-    
+
+
+    const checkOrderAmount = async () => {
+        async function calculateOrderSum(productsCount) {
+            const fetchPromises = Object.entries(productsCount).map(async ([productId, productQty]) => {
+                const response = await fetch(`http://localhost:8080/api/product/${productId}`);
+                const product = await response.json();
+                return product.price * productQty;
+            });
+
+            const productPrices = await Promise.all(fetchPromises);
+            return productPrices.reduce((acc, current) => acc + current, 0);
+        }
+
+        const sum = await calculateOrderSum(productsCount);
+        return sum >= 300 && sum <= 100000;
+    }
+
     const handleOrder = async () => {
 
         const orderProducts = Object.entries(productsCount).map(([id, quantity]) => ({
@@ -46,42 +63,50 @@ const Cart = ({ onCreate, isAuthed, price }) => {
             orderProducts
         }
 
-        try {
-            const response = await fetch("http://localhost:8080/api/orders", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(order)
-            });
+        const createOrder = async (order) => {
+            try {
+                const response = await fetch("http://localhost:8080/api/orders", {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(order)
+                });
 
-            if (response.ok) {
-                alert("Order is successfully created");
-                onCreate();
-                navigate("/");
-            } else if (response.status === 400) {
-                alert("Order amount should be in the range of 300 to 100,000 CZK")
-            } else if (response.status === 404) {
-                alert("User does not exist");
-            } else {
-                alert("Error creating an order");
+                if (response.ok) {
+                    alert("Order is successfully created");
+                    onCreate();
+                    navigate("/");
+                } else if (response.status === 404) {
+                    alert("User does not exist");
+                } else {
+                    alert("Error creating an order");
+                }
+            } catch (error) {
+                console.log("Error creating order", error)
             }
-        } catch (error) {
-            console.error("Error creating an order: ", error);
         }
+
+        checkOrderAmount().then(isValid => {
+            if (isValid) {
+                createOrder(order)
+            } else {
+                alert("Order amount should be in the range of 300 to 100,000 CZK");
+            }
+        })
     }
 
     return (
         <div className="container py-4 align-content-center">
             <h1 className="mb-5 text-center fw-normal">Cart</h1>
             {Object.keys(productsInfo).map(id =>
-                <div key={id} className="justify-content-center mb-5 row align-items-center my-3">
+                <div key={id} className="justify-content-center mb-5 row align-items-center my-3 p-2">
                     <div className="col-1">
                         <img src={productsInfo[id].image} className="img-fluid" alt={productsInfo[id].name} style={{maxWidth: "100px"}} />
                     </div>
-                    <div className="col-1"><strong>{productsInfo[id].name}</strong></div>
+                    <div className="ms-4 col-1"><strong>{productsInfo[id].name}</strong></div>
 
-                    <div className="ms-5 col-1">{productsCount[id]} items</div>
+                    <div className="ms-1 col-1">{productsCount[id]} items</div>
                     <div className="col-1">*</div>
                     <div className="col-1">{Math.round(productsInfo[id].price * 100) / 100} CZK</div>
                     <div className="col-1">=</div>
