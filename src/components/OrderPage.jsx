@@ -71,7 +71,7 @@ const OrderPage = ({ isAuthed }) => {
 
             <div className="row mb-4">
                 <div className="col-3">
-                    <h2 className="fw-normal">Date of creation:</h2>
+                    <h2 className="fw-normal">Date of status change:</h2>
                     <p className="card-text">{new Date(order.date).toLocaleString()}</p>
                 </div>
                 <div className="col-3">
